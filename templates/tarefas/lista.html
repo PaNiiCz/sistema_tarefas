@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="tarefas-container">
+    
+    <!-- Cabeçalho -->
+    <div class="tarefas-header">
+        <div>
+            <h2>Minhas Tarefas</h2>
+            <p class="text-secondary">{{ tarefas.count }} tarefa(s) encontrada(s)</p>
+        </div>
+        <a href="{% url 'criar_tarefa' %}" class="btn-primary" style="width: auto; padding: 10px 20px;">
+            <i class="bi bi-plus-lg"></i> Nova Tarefa
+        </a>
+    </div>
+
+    <!-- Mini cards -->
+    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="stat-card pendentes">
+            <div class="stat-icon"><i class="bi bi-hourglass-split"></i></div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_pendentes }}</span>
+                <span class="stat-label">Pendentes</span>
+            </div>
+        </div>
+        <div class="stat-card concluidas">
+            <div class="stat-icon"><i class="bi bi-check2-circle"></i></div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_concluidas }}</span>
+                <span class="stat-label">Concluídas</span>
+            </div>
+        </div>
+        <div class="stat-card atrasadas">
+            <div class="stat-icon"><i class="bi bi-exclamation-triangle"></i></div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_atrasadas }}</span>
+                <span class="stat-label">Atrasadas</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros e Busca -->
+    <div class="filtros-bar">
+        <form method="GET" class="filtros-form">
+            <input type="text" name="busca" placeholder="Buscar tarefa..." value="{{ request.GET.busca }}" class="form-control" style="width: 250px;">
+            <select name="status" class="form-control" style="width: 160px;">
+                <option value="">Todos os Status</option>
+                <option value="pendente" {% if request.GET.status == 'pendente' %}selected{% endif %}>Pendente</option>
+                <option value="em_andamento" {% if request.GET.status == 'em_andamento' %}selected{% endif %}>Em Andamento</option>
+                <option value="concluida" {% if request.GET.status == 'concluida' %}selected{% endif %}>Concluída</option>
+                <option value="cancelada" {% if request.GET.status == 'cancelada' %}selected{% endif %}>Cancelada</option>
+            </select>
+            <select name="prioridade" class="form-control" style="width: 160px;">
+                <option value="">Todas as Prioridades</option>
+                <option value="baixa" {% if request.GET.prioridade == 'baixa' %}selected{% endif %}>Baixa</option>
+                <option value="media" {% if request.GET.prioridade == 'media' %}selected{% endif %}>Média</option>
+                <option value="alta" {% if request.GET.prioridade == 'alta' %}selected{% endif %}>Alta</option>
+                <option value="urgente" {% if request.GET.prioridade == 'urgente' %}selected{% endif %}>Urgente</option>
+            </select>
+            <button type="submit" class="btn-primary" style="width: auto; padding: 8px 16px;">
+                <i class="bi bi-funnel"></i> Filtrar
+            </button>
+            <a href="{% url 'lista_tarefas' %}" class="btn-logout" style="color: var(--text-secondary);">Limpar</a>
+        </form>
+    </div>
+
+    <!-- Lista de Tarefas -->
+    <div class="tarefas-list">
+        {% if tarefas %}
+            {% for tarefa in tarefas %}
+            <div class="tarefa-card {% if tarefa.esta_atrasada %}atrasada{% endif %}">
+                <div class="tarefa-card-header">
+                    <h4>{{ tarefa.titulo }}</h4>
+                    <div class="tarefa-badges">
+                        <span class="badge badge-{{ tarefa.status }}">{{ tarefa.get_status_display }}</span>
+                        <span class="badge badge-{{ tarefa.prioridade }}">{{ tarefa.get_prioridade_display }}</span>
+                        {% if tarefa.etiqueta %}
+                            <span class="badge badge-etiqueta">{{ tarefa.etiqueta }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% if tarefa.descricao %}
+                    <p class="tarefa-descricao">{{ tarefa.descricao|truncatechars:150 }}</p>
+                {% endif %}
+                <div class="tarefa-card-footer">
+                    <span class="tarefa-data">
+                        <i class="bi bi-calendar3"></i>
+                        {% if tarefa.prazo %}
+                            Prazo: {{ tarefa.prazo|date:"d/m/Y" }}
+                            {% if tarefa.esta_atrasada %}
+                                <span class="text-danger">(Atrasada)</span>
+                            {% endif %}
+                        {% else %}
+                            Sem prazo
+                        {% endif %}
+                    </span>
+                    <div class="tarefa-actions">
+                        <a href="{% url 'editar_tarefa' tarefa.pk %}" class="btn-icon" title="Editar">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'excluir_tarefa' tarefa.pk %}" class="btn-icon btn-delete" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h3>Nenhuma tarefa encontrada</h3>
+                <p>Comece criando sua primeira tarefa!</p>
+                <a href="{% url 'criar_tarefa' %}" class="btn-primary" style="width: auto; padding: 10px 24px; display: inline-flex;">
+                    <i class="bi bi-plus-lg"></i> Nova Tarefa
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}

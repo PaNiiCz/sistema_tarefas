@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+    <!-- Saudação -->
+    <div class="greeting">
+        <h2>Olá, {{ user.username }}!</h2>
+        <p class="text-secondary">Resumo das suas tarefas hoje</p>
+    </div>
+
+    <!-- Cards de Estatísticas -->
+    <div class="stats-grid">
+        <div class="stat-card pendentes">
+            <div class="stat-icon">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ tarefas_pendentes }}</span>
+                <span class="stat-label">Pendentes</span>
+            </div>
+        </div>
+
+        <div class="stat-card andamento">
+            <div class="stat-icon">
+                <i class="bi bi-arrow-repeat"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ tarefas_andamento }}</span>
+                <span class="stat-label">Em Andamento</span>
+            </div>
+        </div>
+
+        <div class="stat-card concluidas">
+            <div class="stat-icon">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ tarefas_concluidas }}</span>
+                <span class="stat-label">Concluídas</span>
+            </div>
+        </div>
+
+        <div class="stat-card atrasadas">
+            <div class="stat-icon">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ tarefas_atrasadas }}</span>
+                <span class="stat-label">Atrasadas</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico + Próximas Tarefas -->
+    <div class="charts-row">
+        <!-- Barra de Progresso -->
+        <div class="card progress-card">
+            <h3>Progresso Geral</h3>
+            <div class="progress-circle-container">
+                <div class="progress-circle">
+                    <svg viewBox="0 0 36 36">
+                        <path class="circle-bg"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        <path class="circle-fill"
+                            stroke-dasharray="{{ percentual_conclusao }}, 100"
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                    </svg>
+                    <div class="percentage">
+                        <span>{{ percentual_conclusao }}%</span>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-secondary">{{ tarefas_concluidas }} de {{ total_tarefas }} tarefas concluídas</p>
+        </div>
+
+        <!-- Próximas Tarefas -->
+        <div class="card">
+            <h3><i class="bi bi-calendar-check"></i> Próximas Tarefas</h3>
+            
+            {% if proximas_tarefas %}
+                <div class="proximas-list">
+                    {% for tarefa in proximas_tarefas %}
+                    <div class="proxima-item">
+                        <div class="proxima-info">
+                            <span class="proxima-titulo">{{ tarefa.titulo }}</span>
+                            <div class="proxima-meta">
+                                {% if tarefa.prazo %}
+                                    <span class="proxima-prazo {% if tarefa.esta_atrasada %}text-danger{% endif %}">
+                                        <i class="bi bi-calendar3"></i> {{ tarefa.prazo|date:"d/m/Y" }}
+                                        {% if tarefa.esta_atrasada %}(Atrasada){% endif %}
+                                    </span>
+                                {% else %}
+                                    <span class="proxima-prazo text-secondary">Sem prazo</span>
+                                {% endif %}
+                                <span class="badge badge-{{ tarefa.prioridade }}">{{ tarefa.get_prioridade_display }}</span>
+                            </div>
+                        </div>
+                        <a href="{% url 'editar_tarefa' tarefa.pk %}" class="btn-icon" title="Editar">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-small">
+                    <i class="bi bi-check-circle"></i>
+                    <p>Nenhuma tarefa pendente! 🎉</p>
+                </div>
+            {% endif %}
+            
+            <a href="{% url 'lista_tarefas' %}" class="btn-link">
+                Ver todas as tarefas <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

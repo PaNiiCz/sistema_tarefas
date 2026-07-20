@@ -1,0 +1,59 @@
+{% load static %}
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <i class="bi bi-kanban-fill"></i>
+        <h2>TaskFlow</h2>
+    </div>
+
+    <nav>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="{% url 'dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'lista_tarefas' %}" class="sidebar-link {% if 'tarefas' in request.path %}active{% endif %}">
+                    <i class="bi bi-list-check"></i>
+                    <span>Tarefas</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-link disabled" title="Em breve">
+                    <i class="bi bi-folder2"></i>
+                    <span>Projetos</span>
+                    <small class="badge-em-breve">em breve</small>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-link disabled" title="Em breve">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Calendário</span>
+                    <small class="badge-em-breve">em breve</small>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'relatorios' %}" class="sidebar-link {% if 'relatorios' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-bar-graph"></i>
+                    <span>Relatórios</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-link disabled" title="Em breve">
+                    <i class="bi bi-people"></i>
+                    <span>Usuários</span>
+                    <small class="badge-em-breve">em breve</small>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+        <button class="theme-toggle" id="themeToggle">
+            <i class="bi bi-moon-stars"></i>
+            <span>Modo Escuro</span>
+        </button>
+    </div>
+</aside>

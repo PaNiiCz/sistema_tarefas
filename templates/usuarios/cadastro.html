@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="bi bi-person-plus"></i>
+            <h2>Criar Conta</h2>
+            <p>Preencha os dados para se cadastrar</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">
+                    <i class="bi bi-person"></i> Usuário
+                </label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <span class="error-text">{{ form.username.errors }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password1">
+                    <i class="bi bi-lock"></i> Senha
+                </label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <span class="error-text">{{ form.password1.errors }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password2">
+                    <i class="bi bi-lock-fill"></i> Confirmar Senha
+                </label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <span class="error-text">{{ form.password2.errors }}</span>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn-primary">
+                <i class="bi bi-person-check"></i> Criar Conta
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Já tem uma conta? <a href="{% url 'login' %}">Faça login</a></p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

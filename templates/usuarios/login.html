@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="bi bi-kanban-fill"></i>
+            <h2>TaskFlow</h2>
+            <p>Faça login para continuar</p>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username">
+                    <i class="bi bi-person"></i> Usuário
+                </label>
+                {{ form.username }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">
+                    <i class="bi bi-lock"></i> Senha
+                </label>
+                {{ form.password }}
+            </div>
+
+            <button type="submit" class="btn-primary">
+                <i class="bi bi-box-arrow-in-right"></i> Entrar
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Não tem uma conta? <a href="{% url 'cadastro' %}">Cadastre-se</a></p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

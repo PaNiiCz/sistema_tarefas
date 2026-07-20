@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="tarefas-container">
+    <div class="tarefas-header">
+        <div>
+            <h2>Relatórios</h2>
+            <p class="text-secondary">Resumo geral das suas {{ total_tarefas }} tarefa(s)</p>
+        </div>
+    </div>
+
+    <div class="charts-row">
+        <div class="card">
+            <h3><i class="bi bi-pie-chart"></i> Por Status</h3>
+            <div class="summary-list">
+                {% for item in por_status %}
+                <div class="summary-item">
+                    <span class="badge badge-{{ item.status }}">{{ item.status }}</span>
+                    <span>{{ item.total }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <h3><i class="bi bi-bar-chart"></i> Por Prioridade</h3>
+            <div class="summary-list">
+                {% for item in por_prioridade %}
+                <div class="summary-item">
+                    <span class="badge badge-{{ item.prioridade }}">{{ item.prioridade }}</span>
+                    <span>{{ item.total }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h3><i class="bi bi-exclamation-triangle"></i> Tarefas Atrasadas</h3>
+        {% if atrasadas %}
+            <div class="tarefas-list">
+                {% for tarefa in atrasadas %}
+                <div class="tarefa-card atrasada">
+                    <div class="tarefa-card-header">
+                        <h4>{{ tarefa.titulo }}</h4>
+                        <span class="badge badge-{{ tarefa.prioridade }}">{{ tarefa.get_prioridade_display }}</span>
+                    </div>
+                    <span class="tarefa-data text-danger">Prazo: {{ tarefa.prazo|date:"d/m/Y" }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-secondary">Nenhuma tarefa atrasada. 🎉</p>
+        {% endif %}
+    </div>
+
+    {% if etiquetas %}
+    <div class="card" style="margin-top: 20px;">
+        <h3><i class="bi bi-tags"></i> Por Etiqueta</h3>
+        <div class="summary-list">
+            {% for item in etiquetas %}
+            <div class="summary-item">
+                <span class="badge badge-etiqueta">{{ item.etiqueta }}</span>
+                <span>{{ item.total }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

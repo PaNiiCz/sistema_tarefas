@@ -1,0 +1,12 @@
+<header class="header">
+    <h3>Painel Principal</h3>
+    <div class="header-actions">
+        <span class="user-info">
+            <i class="bi bi-person-circle"></i>
+            {{ user.username }}
+        </span>
+        <a href="{% url 'logout' %}" class="btn-logout">
+            <i class="bi bi-box-arrow-right"></i> Sair
+        </a>
+    </div>
+</header>
