@@ -959,3 +959,22 @@ a {
 @media (max-width: 576px) {
     .notes-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+textarea.scratch-pad {
+    display: block;
+    width: 100% !important;
+    min-height: 160px;
+    box-sizing: border-box;
+    background: var(--bg-primary) !important;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 12px;
+    font-size: 14px;
+    color: var(--text-primary) !important;
+    font-family: inherit;
+    resize: vertical;
+}
+
+textarea.scratch-pad::placeholder {
+    color: var(--text-secondary);
+}
